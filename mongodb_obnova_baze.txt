@@ -1,0 +1,15 @@
+- Baza podataka koja je korištena za laboratorijske vježbe je Mongo Database (MongoDB)
+- kako bi se preko komandne linije mogao napraviti dump i restore baze podataka potrebno je osim MongoDB servera instalirati i MongoDB Database Tools (https://www.mongodb.com/try/download/bi-connector)
+- preuzeti alati se ne pokreću iz mongosh terminala (Mongo shell) nego iz klasičnog terminala Vašeg računala
+- među preuzetim alatima nalaze se:
+	- mongodump:
+		- alat za izradu kopije baze podataka
+		- naredba korištena za izradu kopije baze: mongodump --db=open_dataset --collection=movies --out=<putanja_do_izlaznog_direktorija>
+	- mongorestore:
+		- alat za obnovu baze podataka
+		- potrebno je preuzeti direktorij open_dataset koji se nalazi u git repozitoriju te ga lokalno pohraniti na računalo
+		- preuzeti direktorij sadrži dvije datoteke:
+			- movies.bson -> sažeti sadržaj kolekcije movies baze open_dataset
+			- movies.metadata.json -> metapodaci kolekcije movies baze open_dataset
+		- iz terminala pokrenuti naredbu: mongorestore -d open_dataset <putanja_do_preuzetog_direktorija>
+		- izvođenjem prethodne naredbe napraviti će se obnova baze podataka open_dataset 

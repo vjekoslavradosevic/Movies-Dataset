@@ -6,7 +6,7 @@ Collection of movie-related data for various purposes, such as analysis, researc
 
 #### Licence: Creative Commons Zero v1.0 Universal
 
-#### Author: Vjekoslv Radošević
+#### Author: Vjekoslav Radošević
 
 #### Dataset version: 1.0
 
@@ -22,13 +22,13 @@ Collection of movie-related data for various purposes, such as analysis, researc
 
 #### Dataset formats: CSV, JSON
 
-#### Movies dataset attributes description:
+#### Dataset attributes description:
 
 -   **Title** : The title of the movie
 -   **Release date** : The date when the movie was officially released in theaters
 -   **Director** : The director of the movie, responsible for overseeing the creative aspects of the film
--   **Producer** : The producer of the movie, responsible for complete production of the film
--   **Duration** : The total length of the movie in minutes
+-   **Producer** : The producer of the movie, responsible for overseeing the complete production of the film
+-   **Duration** : The length of the movie in minutes
 -   **Actors** : A list of key actors in the movie
 -   **Genres** : A list of genres that describe the type of movie
 -   **Plot** : A brief description of the movie's storyline

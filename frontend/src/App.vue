@@ -67,6 +67,7 @@ div.nav {
     justify-content: space-between;
     align-items: center;
     background-color: #00874b;
+    border-radius: 0px 0px 10px 10px;
 }
 
 div.links {

@@ -10,8 +10,9 @@ const client = new MongoClient(url);
 export async function connectToDatabase() {
     try {
         await client.connect();
-        console.log("Connected to MongoDB");
-        return client.db(dbName);
+        // console.log("Connected to MongoDB");
+        const database = client.db(dbName);
+        return database.collection("movies");
     } catch (error) {
         console.error("Error connecting to MongoDB", error);
         throw error;
@@ -20,5 +21,5 @@ export async function connectToDatabase() {
 
 export function closeConnection() {
     client.close();
-    console.log("MongoDB connection closed");
+    // console.log("MongoDB connection closed");
 }

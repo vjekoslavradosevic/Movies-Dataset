@@ -74,6 +74,7 @@ export default {
     margin: 20px;
     background-color: #00af60;
     border-radius: 5px;
+    font-weight: bold;
 }
 .download-link:hover {
     cursor: pointer;

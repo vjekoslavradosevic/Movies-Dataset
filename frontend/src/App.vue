@@ -26,8 +26,8 @@ export default {
                     active: true,
                 },
                 {
-                    name: "Database",
-                    href: "/database",
+                    name: "Datatable",
+                    href: "/datatable",
                     active: false,
                 },
             ],

@@ -90,12 +90,12 @@ export default {
         packCriteria() {
             let input = this.input;
             let arr = [];
-            if (this.criteria["oscars"] || this.criteria["box_office"]) {
-                input = parseInt(input);
-            }
 
             for (let key of Object.keys(this.criteria)) {
                 if (this.criteria[key] && key !== "everything") {
+                    if (key === "oscars" || key === "box_office") {
+                        arr.push({ [key]: parseInt(input) });
+                    }
                     arr.push({ [key]: input });
                 }
             }

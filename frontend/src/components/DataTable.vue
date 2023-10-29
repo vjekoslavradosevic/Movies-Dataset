@@ -9,9 +9,10 @@
             <td>{{ movie["Director"] }}</td>
             <td>{{ movie["Producer"] }}</td>
             <td>{{ movie["Duration"] }}</td>
+            <td>{{ movie["Actors"] }}</td>
+            <td>{{ movie["Genres"] }}</td>
             <td>{{ movie["Oscars"] }}</td>
             <td>{{ movie["Box office"] }}</td>
-            <td>{{ movie["Actors"] }}</td>
         </tr>
     </table>
 </template>
@@ -27,7 +28,7 @@ table {
     width: 95vw;
     margin: auto;
     border: 3px solid #00af60;
-    border-collapse: collapse; /* Merge borders */
+    border-collapse: collapse;
     border-spacing: 0;
     background-color: #a9fbd6fe;
 }

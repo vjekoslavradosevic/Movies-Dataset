@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import IndexView from "../views/IndexView.vue";
-import DatabaseView from "../views/DatabaseView.vue";
+import DataTableView from "../views/DataTableView.vue";
 
 const routes = [
     {
@@ -9,9 +9,9 @@ const routes = [
         component: IndexView,
     },
     {
-        path: "/database",
-        name: "database",
-        component: DatabaseView,
+        path: "/datatable",
+        name: "datatable",
+        component: DataTableView,
     },
 ];
 

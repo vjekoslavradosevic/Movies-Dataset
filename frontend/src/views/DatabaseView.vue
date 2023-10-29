@@ -35,6 +35,14 @@
                     <label>Genres</label>
                 </div>
                 <div class="checkbox-item">
+                    <input type="checkbox" v-model="criteria.oscars" />
+                    <label>Oscars</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" v-model="criteria.box_office" />
+                    <label>Box office</label>
+                </div>
+                <div class="checkbox-item">
                     <input type="checkbox" v-model="criteria.everything" />
                     <label>*</label>
                 </div>
@@ -45,10 +53,14 @@
             </div>
         </div>
     </form>
+    <DataTable v-if="data.length" :data="data" />
 </template>
 
 <script>
+import DataTable from "../components/DataTable.vue";
+
 export default {
+    components: { DataTable },
     data() {
         return {
             criteria: {
@@ -60,6 +72,8 @@ export default {
                 "actors.lastname": false,
                 duration: false,
                 genres: false,
+                oscars: false,
+                box_office: false,
                 everything: true,
             },
             input: "",
@@ -69,6 +83,10 @@ export default {
     methods: {
         packCriteria() {
             let arr = [];
+            if (this.criteria["oscars"] || this.criteria["box_office"]) {
+                this.input = parseInt(this.input);
+            }
+
             for (let key of Object.keys(this.criteria)) {
                 if (this.criteria[key] && key !== "everything") {
                     arr.push({ [key]: this.input });
@@ -78,11 +96,14 @@ export default {
             return {
                 criteria: arr,
                 everything: this.criteria.everything,
+                input: this.input,
             };
         },
         async handleSubmit() {
             try {
                 let body = this.packCriteria();
+
+                console.log(body);
 
                 let response = await fetch("http://localhost:3000", {
                     method: "POST",
@@ -91,11 +112,39 @@ export default {
                     },
                     body: JSON.stringify(body),
                 });
-                this.data = await response.json();
-                console.log(this.data);
+
+                let data = await response.json();
+
+                if (response.status === 400) {
+                    console.log(data.error);
+                } else {
+                    this.parseData(data);
+                    console.log(data);
+                }
             } catch (error) {
                 console.log(error.message);
             }
+        },
+        parseData(data) {
+            let movies = [];
+            data.forEach((movie) => {
+                let table_movie = {};
+                table_movie["Title"] = movie["title"];
+                table_movie["Release date"] = movie["release_date"];
+                table_movie["Director"] = movie["director"]["firstname"] + " " + movie["director"]["lastname"];
+                table_movie["Producer"] = movie["producer"]["firstname"] + " " + movie["producer"]["lastname"];
+                table_movie["Duration"] = movie["duration"];
+                table_movie["Oscars"] = movie["oscars"];
+                table_movie["Box office"] = movie["box_office"];
+
+                let actors = "";
+                movie["actors"].forEach((actor) => {
+                    actors += actor["firstname"] + " " + actor["lastname"] + "\n";
+                });
+                table_movie["Actors"] = actors.slice(0, -1);
+                movies.push(table_movie);
+            });
+            this.data = movies;
         },
     },
 };
@@ -106,12 +155,13 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 50vw;
-    height: 50vh;
+    height: 60vh;
     justify-items: center;
     align-items: center;
     margin: 20px auto;
     border-radius: 5px;
     background-color: #a9fbd6fe;
+    border: 3px solid #00af60;
 }
 .checkboxes {
     width: 100%;

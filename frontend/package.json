@@ -1,7 +1,10 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "author": "Vjekoslav Radošević",
+  "license": "CC0-1.0",
+  "description": "Collection of movie-related data for various purposes, such as analysis, research, and application development. The dataset includes information about movies, actors, directors, genres, release dates, ratings, and more.",
+  "keywords": ["movies", "film", "actors", "box office", "oscars"],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"

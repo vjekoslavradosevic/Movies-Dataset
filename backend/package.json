@@ -1,15 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "author": "Vjekoslav Radošević",
+  "license": "CC0-1.0",
+  "description": "Collection of movie-related data for various purposes, such as analysis, research, and application development. The dataset includes information about movies, actors, directors, genres, release dates, ratings, and more.",
+  "keywords": ["movies", "film", "actors", "box office", "oscars"],
   "type": "module",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "scripts": {},
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

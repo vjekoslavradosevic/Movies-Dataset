@@ -1,5 +1,6 @@
 <template>
-    <div class="grid">
+    <Info />
+    <div class="grid height-40">
         <div class="container">
             <div class="download-link" @click="downloadCSV">Download CSV</div>
             <p>
@@ -22,7 +23,9 @@
 </template>
 
 <script>
+import Info from "../components/Info.vue";
 export default {
+    components: { Info },
     methods: {
         createAnchor(path, name) {
             const link = document.createElement("a");
@@ -49,8 +52,11 @@ export default {
     display: grid;
     grid-gap: 20px;
     grid-template-columns: 1fr 1fr;
-    height: 40vh;
     margin: 20px;
+}
+
+.height-40 {
+    height: 40vh;
 }
 
 .container {

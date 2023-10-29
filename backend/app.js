@@ -14,9 +14,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", async (req, res) => {
-    let data = await coll.find({}, { projection: { _id: 0 } }).toArray();
-    res.send(data);
+app.post("/", async (req, res) => {
+    try {
+        let criteria = req.body.criteria;
+
+        let data = await coll.find({ $or: criteria }, { projection: { _id: 0 } }).toArray();
+        res.send(data);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(error.status);
+    }
 });
 
 app.listen(3000, () => {

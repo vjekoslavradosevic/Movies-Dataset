@@ -11,19 +11,19 @@
                     <label>Release date</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" v-model="criteria.director_firstname" />
+                    <input type="checkbox" v-model="criteria['director.firstname']" />
                     <label>Director's firstname</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" v-model="criteria.director_lastname" />
+                    <input type="checkbox" v-model="criteria['director.lastname']" />
                     <label>Director's lastname</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" v-model="criteria.actor_firstname" />
+                    <input type="checkbox" v-model="criteria['actors.firstname']" />
                     <label>Actor's firstname</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" v-model="criteria.actor_lastname" />
+                    <input type="checkbox" v-model="criteria['actors.lastname']" />
                     <label>Actor's lastname</label>
                 </div>
                 <div class="checkbox-item">
@@ -41,7 +41,7 @@
             </div>
             <div>
                 <input type="text" v-model="input" /><br />
-                <button class="submit">Submit</button>
+                <button class="submit">Search</button>
             </div>
         </div>
     </form>
@@ -54,10 +54,10 @@ export default {
             criteria: {
                 title: false,
                 release_date: false,
-                director_firstname: false,
-                director_lastname: false,
-                actor_firstname: false,
-                actor_lastname: false,
+                "director.firstname": false,
+                "director.lastname": false,
+                "actors.firstname": false,
+                "actors.lastname": false,
                 duration: false,
                 genres: false,
                 everything: true,
@@ -67,16 +67,35 @@ export default {
         };
     },
     methods: {
+        packCriteria() {
+            let arr = [];
+            for (let key of Object.keys(this.criteria)) {
+                if (this.criteria[key] && key !== "everything") {
+                    arr.push({ [key]: this.input });
+                }
+            }
+
+            return {
+                criteria: arr,
+                everything: this.criteria.everything,
+            };
+        },
         async handleSubmit() {
-            let response = await fetch("http://localhost:3000", {
-                method: "GET",
-                body: JSON.stringify({
-                    criteria: this.criteria,
-                    input: this.input,
-                }),
-            });
-            this.data = await response.json();
-            console.log(this.data);
+            try {
+                let body = this.packCriteria();
+
+                let response = await fetch("http://localhost:3000", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(body),
+                });
+                this.data = await response.json();
+                console.log(this.data);
+            } catch (error) {
+                console.log(error.message);
+            }
         },
     },
 };
@@ -92,7 +111,7 @@ export default {
     align-items: center;
     margin: 20px auto;
     border-radius: 5px;
-    border: 1px solid #a9fbd6fe;
+    background-color: #a9fbd6fe;
 }
 .checkboxes {
     width: 100%;
@@ -105,21 +124,35 @@ export default {
 }
 input[type="checkbox"] {
     display: inline-block;
-    width: 16px;
     margin: 0 30px 0 70px;
     position: relative;
-    top: 2px;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid black;
+}
+input[type="checkbox"]:checked {
+    accent-color: green;
 }
 input[type="text"] {
     height: 30px;
     width: 200px;
+    padding: 3px;
     border-radius: 5px;
+    border: 2px solid #00af60;
+    background-color: #a9fbd6fe;
 }
 .submit {
+    font-weight: bold;
     margin: 15px auto;
     padding: 10px;
-    background-color: #10e887;
+    background-color: #00af60;
     border-radius: 5px;
+    border: 1px solid #00af60;
+}
+.submit:hover {
+    cursor: pointer;
+    background-color: #10e887;
     border: 1px solid #10e887;
 }
 </style>

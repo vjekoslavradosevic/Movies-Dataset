@@ -54,10 +54,14 @@
         </div>
     </form>
     <DataTable v-if="data.length" :data="data" />
+    <div v-if="link_json" class="download-link" @click="downloadJSON">Download JSON</div>
+    <div v-if="link_csv" class="download-link" @click="downloadCSV">Download CSV</div>
 </template>
 
 <script>
 import DataTable from "../components/DataTable.vue";
+import { parseData } from "../utils/parseData";
+import { exportToJSON, exportToCSV } from "../utils/exportFunctions";
 
 export default {
     components: { DataTable },
@@ -78,32 +82,33 @@ export default {
             },
             input: "",
             data: [],
+            link_json: null,
+            link_csv: null,
         };
     },
     methods: {
         packCriteria() {
+            let input = this.input;
             let arr = [];
             if (this.criteria["oscars"] || this.criteria["box_office"]) {
-                this.input = parseInt(this.input);
+                input = parseInt(input);
             }
 
             for (let key of Object.keys(this.criteria)) {
                 if (this.criteria[key] && key !== "everything") {
-                    arr.push({ [key]: this.input });
+                    arr.push({ [key]: input });
                 }
             }
 
             return {
                 criteria: arr,
                 everything: this.criteria.everything,
-                input: this.input,
+                input: input,
             };
         },
         async handleSubmit() {
             try {
                 let body = this.packCriteria();
-
-                console.log(body);
 
                 let response = await fetch("http://localhost:3000", {
                     method: "POST",
@@ -118,33 +123,24 @@ export default {
                 if (response.status === 400) {
                     console.log(data.error);
                 } else {
-                    this.parseData(data);
-                    console.log(data);
+                    this.data = parseData(data);
+                    if (data.length) {
+                        this.link_json = exportToJSON(data);
+                        this.link_csv = exportToCSV(data);
+                    } else {
+                        this.link_json = null;
+                        this.link_csv = null;
+                    }
                 }
             } catch (error) {
                 console.log(error.message);
             }
         },
-        parseData(data) {
-            let movies = [];
-            data.forEach((movie) => {
-                let table_movie = {};
-                table_movie["Title"] = movie["title"];
-                table_movie["Release date"] = movie["release_date"];
-                table_movie["Director"] = movie["director"]["firstname"] + " " + movie["director"]["lastname"];
-                table_movie["Producer"] = movie["producer"]["firstname"] + " " + movie["producer"]["lastname"];
-                table_movie["Duration"] = movie["duration"];
-                table_movie["Oscars"] = movie["oscars"];
-                table_movie["Box office"] = movie["box_office"];
-
-                let actors = "";
-                movie["actors"].forEach((actor) => {
-                    actors += actor["firstname"] + " " + actor["lastname"] + "\n";
-                });
-                table_movie["Actors"] = actors.slice(0, -1);
-                movies.push(table_movie);
-            });
-            this.data = movies;
+        downloadJSON() {
+            this.link_json.click();
+        },
+        downloadCSV() {
+            this.link_csv.click();
         },
     },
 };

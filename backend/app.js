@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { connectToDatabase, closeConnection } from "./db/connection.js";
+import { createCriteria } from "./utils/createCriteria.js";
 
 let app = express();
 
@@ -27,22 +28,10 @@ app.post("/", async (req, res) => {
         }
 
         if (everything) {
-            let fields = [
-                "title",
-                "release_date",
-                "director.firstname",
-                "director.lastname",
-                "actors.firstname",
-                "actors.lastname",
-                "duration",
-                "genres",
-                "oscars",
-                "box_office",
-            ];
-            criteria = [];
-            for (let key of fields) {
-                criteria.push({ [key]: input });
+            if (!isNaN(parseInt(input))) {
+                input = parseInt(input);
             }
+            criteria = createCriteria(input);
         }
 
         let data = await coll.find({ $or: criteria }, { projection: { _id: 0 } }).toArray();

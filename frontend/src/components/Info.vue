@@ -1,14 +1,13 @@
 <template>
-    <div class="description long font-large">
-        A collection of movie-related data for various purposes, such as analysis, research, and application
-        development. The dataset includes information about movies, actors, directors, genres, release dates, ratings,
-        and more.
-    </div>
-
     <div class="grid grid-description">
         <div class="description box">
             <h2>Dataset Information</h2>
             <ul>
+                <li>
+                    <strong>Description:</strong> A collection of movie-related data for various purposes, such as
+                    analysis, research, and application development. The dataset includes information about movies,
+                    actors, directors, genres, release dates, ratings, and more.
+                </li>
                 <li><strong>Licence:</strong> Creative Commons Zero v1.0 Universal</li>
                 <li><strong>Author:</strong> Vjekoslav Radošević</li>
                 <li><strong>Dataset version:</strong> 1.0</li>
@@ -59,15 +58,6 @@
     padding: 15px;
     border-radius: 5px;
     background-color: #a9fbd6fe;
-}
-.font-large {
-    font-size: large;
-    font-weight: bold;
-}
-.long {
-    margin: 20px;
-    height: 10vh;
-    flex-direction: row;
 }
 .box {
     align-items: flex-start;

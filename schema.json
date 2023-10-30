@@ -1,0 +1,162 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://or.fer.unizg.hr/orfilmovi.json",
+    "type": "array",
+    "title": "Movies dataset",
+    "description": "A collection of movie-related data.",
+    "items": {
+        "type": "object",
+        "title": "movie",
+        "description": "information about a single movie.",
+        "required": [
+            "title",
+            "release_date",
+            "director",
+            "producer",
+            "duration",
+            "actors",
+            "genres",
+            "plot",
+            "reviews",
+            "oscars",
+            "box_office"
+        ],
+        "properties": {
+            "title": {
+                "type": "string",
+                "title": "title",
+                "description": "name of the movie."
+            }, 
+            "release_date": {
+                "type": "string",
+                "format": "date",
+                "title": "release_date",
+                "description": "release date of the movie."
+            },
+            "director": {
+                "type": "object",
+                "title": "director",
+                "description": "director of the movie.",
+                "required": [
+                    "firstname",
+                    "lastname"
+                ],
+                "properties": {
+                    "firstname": {
+                        "type": "string",
+                        "title": "firstname",
+                        "description": "director's firstname."
+                    },
+                    "lastname":{
+                        "type": "string",
+                        "title": "lastname",
+                        "description": "director's lastname."
+                    }
+                }
+            },
+            "producer": {
+                "type": "object",
+                "title": "producer",
+                "description": "producer of the movie.",
+                "required": [
+                    "firstname",
+                    "lastname"
+                ],
+                "properties": {
+                    "firstname": {
+                        "type": "string",
+                        "title": "firstname",
+                        "description": "producer's firstname."
+                    },
+                    "lastname":{
+                        "type": "string",
+                        "title": "lastname",
+                        "description": "producer's lastname."
+                    }
+                }
+            },
+            "duration": {
+                "type": "number",
+                "title": "duration",
+                "description": "duration of the movie in minutes."
+            },
+            "actors": {
+                "type": "array",
+                "title": "actors",
+                "description": "An array of movie actors.",
+                "items": {
+                    "type": "object",
+                    "title": "actor",
+                    "description": "actor cast in the movie.",
+                    "required": [
+                        "firstname",
+                        "lastname"
+                    ],
+                    "properties": {
+                        "firstname": {
+                            "type": "string",
+                            "title": "firstname",
+                            "description": "actor's firstname."
+                        },
+                        "lastname":{
+                            "type": "string",
+                            "title": "lastname",
+                            "description": "actor's lastname."
+                        }
+                    }
+                }
+            },
+            "genres": {
+                "type": "array",
+                "title": "genres",
+                "description": "genres present in the movie.",
+                "items": {
+                    "type": "string",
+                    "title": "genre",
+                    "description": "genre present in the movie."
+                }
+            },
+            "plot": {
+                "type": "string",
+                "title": "plot",
+                "description": "summary of the movie."
+            }, 
+            "reviews": {
+                "type": "array",
+                "title": "reviews",
+                "description": "An array of movie reviews by popular review platforms.",
+                "items": {
+                    "type": "object",
+                    "title": "review",
+                    "description": "review of the movie.",
+                    "required": [
+                        "name",
+                        "score"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "title": "name",
+                            "description": "name of the review platform."
+                        },
+                        "score":{
+                            "type": "number",
+                            "title": "score",
+                            "description": "score given by the review platform."
+                        }
+                    }
+                }
+            },
+            "oscars": {
+                "type": "number",
+                "title": "oscars",
+                "description": "number of academy awards the movie won."
+            }, 
+            "box_office": {
+                "type": "number",
+                "title": "box_office",
+                "description": "The total revenue generated by the movie at the box office, in millions of US dollars (USD)."
+            }
+        }
+    }
+}

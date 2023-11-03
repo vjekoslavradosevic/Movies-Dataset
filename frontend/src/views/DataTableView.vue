@@ -95,8 +95,9 @@ export default {
                 if (this.criteria[key] && key !== "everything") {
                     if (key === "oscars" || key === "box_office") {
                         arr.push({ [key]: parseInt(input) });
+                    } else {
+                        arr.push({ [key]: `.*${input}.*` });
                     }
-                    arr.push({ [key]: input });
                 }
             }
 

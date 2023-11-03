@@ -2,6 +2,12 @@ import express from "express";
 import cors from "cors";
 import { connectToDatabase, closeConnection } from "./db/connection.js";
 import { createCriteria } from "./utils/createCriteria.js";
+import { turnToRegex } from "./utils/turnToRegex.js";
+
+process.on("uncaughtException", function (err) {
+    console.error(err);
+    console.log("Continuing...");
+});
 
 let app = express();
 
@@ -33,6 +39,8 @@ app.post("/", async (req, res) => {
             }
             criteria = createCriteria(input);
         }
+
+        criteria = turnToRegex(criteria);
 
         let data = await coll.find({ $or: criteria }, { projection: { _id: 0 } }).toArray();
         res.send(data);

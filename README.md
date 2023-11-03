@@ -4,7 +4,9 @@ Collection of movie-related data for various purposes, such as analysis, researc
 
 ---
 
-#### Licence: Creative Commons Zero v1.0 Universal
+#### Dataset licence: Creative Commons Zero v1.0 Universal
+
+#### Software licence: MIT
 
 #### Author: Vjekoslav Radošević
 

@@ -1,13 +1,15 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
+  "name": "movies_dataset_filtering_server",
+  "version": "2.0.0",
   "author": "Vjekoslav Radošević",
-  "license": "CC0-1.0",
-  "description": "Collection of movie-related data for various purposes, such as analysis, research, and application development. The dataset includes information about movies, actors, directors, genres, release dates, ratings, and more.",
-  "keywords": ["movies", "film", "actors", "box office", "oscars"],
+  "license": "MIT",
+  "description": "A backend server for filtering a dataset about movies.",
+  "keywords": ["movies", "film", "actors", "box office", "oscars", "nodejs", "expressjs", "mongodb"],
   "type": "module",
-  "main": "index.js",
-  "scripts": {},
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

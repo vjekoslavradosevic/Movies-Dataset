@@ -1,10 +1,10 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
+  "name": "movies_dataset_frontend_server",
+  "version": "2.0.0",
   "author": "Vjekoslav Radošević",
-  "license": "CC0-1.0",
-  "description": "Collection of movie-related data for various purposes, such as analysis, research, and application development. The dataset includes information about movies, actors, directors, genres, release dates, ratings, and more.",
-  "keywords": ["movies", "film", "actors", "box office", "oscars"],
+  "license": "MIT",
+  "description": "A frontend server for displaying a web page about movies dataset.",
+  "keywords": ["movies", "film", "actors", "box office", "oscars", "vuejs", "webpack", "json", "csv"],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"

@@ -19,6 +19,14 @@
                     <label>Director's lastname</label>
                 </div>
                 <div class="checkbox-item">
+                    <input type="checkbox" v-model="criteria['producer.firstname']" />
+                    <label>Producer's firstname</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" v-model="criteria['producer.lastname']" />
+                    <label>Producer's lastname</label>
+                </div>
+                <div class="checkbox-item">
                     <input type="checkbox" v-model="criteria['actors.firstname']" />
                     <label>Actor's firstname</label>
                 </div>
@@ -40,7 +48,7 @@
                 </div>
                 <div class="checkbox-item">
                     <input type="checkbox" v-model="criteria.box_office" />
-                    <label>Box office</label>
+                    <label>Box office (millions USD)</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="checkbox" v-model="criteria.everything" />
@@ -72,6 +80,8 @@ export default {
                 release_date: false,
                 "director.firstname": false,
                 "director.lastname": false,
+                "producer.firstname": false,
+                "producer.lastname": false,
                 "actors.firstname": false,
                 "actors.lastname": false,
                 duration: false,
@@ -93,8 +103,10 @@ export default {
 
             for (let key of Object.keys(this.criteria)) {
                 if (this.criteria[key] && key !== "everything") {
-                    if (key === "oscars" || key === "box_office") {
-                        arr.push({ [key]: parseInt(input) });
+                    if (key === "oscars" || key === "box_office" || key === "duration") {
+                        arr.push({ [key]: parseFloat(input) });
+                    } else if (key === "release_date") {
+                        arr.push({ [key]: `${input}` });
                     } else {
                         arr.push({ [key]: `.*${input}.*` });
                     }
@@ -109,7 +121,13 @@ export default {
         },
         async handleSubmit() {
             try {
+                this.data = [];
+                this.link_json = null;
+                this.link_csv = null;
+
                 let body = this.packCriteria();
+
+                if (body.input === "") return;
 
                 let response = await fetch("http://localhost:3000", {
                     method: "POST",
@@ -151,8 +169,8 @@ export default {
 .div-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 50vw;
-    height: 60vh;
+    width: 57vw;
+    height: 70vh;
     justify-items: center;
     align-items: center;
     margin: 20px auto;

@@ -6,7 +6,7 @@ export function parseData(data) {
         table_movie["Release date"] = movie["release_date"];
         table_movie["Director"] = movie["director"]["firstname"] + " " + movie["director"]["lastname"];
         table_movie["Producer"] = movie["producer"]["firstname"] + " " + movie["producer"]["lastname"];
-        table_movie["Duration"] = movie["duration"];
+        table_movie["Duration"] = movie["duration"] + " minutes";
 
         let actors = "";
         movie["actors"].forEach((actor) => {
@@ -17,12 +17,6 @@ export function parseData(data) {
         table_movie["Genres"] = movie["genres"].join("\n");
         table_movie["Oscars"] = movie["oscars"];
         table_movie["Box office"] = movie["box_office"] + " million USD";
-
-        // let genres = "";
-        // movie["genres"].forEach((genre) => {
-        //     genres += genre + "\n";
-        // });
-        // table_movie["Genres"] = genres.slice(0, -1);
 
         movies.push(table_movie);
     });

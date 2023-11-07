@@ -34,13 +34,19 @@ app.post("/", async (req, res) => {
         }
 
         if (everything) {
-            if (!isNaN(parseInt(input))) {
-                input = parseInt(input);
-            }
+            // if (!isNaN(parseInt(input))) {
+            //     input = parseInt(input);
+            // }
             criteria = createCriteria(input);
         }
 
         criteria = turnToRegex(criteria);
+
+        if (criteria.length === 0) {
+            console.log("No valuable search params given.");
+            res.status(400).send({ error: "No valuable search params given." });
+            return;
+        }
 
         let data = await coll.find({ $or: criteria }, { projection: { _id: 0 } }).toArray();
         res.send(data);

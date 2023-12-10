@@ -7,11 +7,16 @@ import { notAcceptable } from "./middleware/notAcceptable.js";
 import { unsupportedMediaType } from "./middleware/unsupportedMediaType.js";
 import {
     getMoviesHandler,
-    getMovieHeadersHandler,
+    getMoviesHeadersHandler,
     postMovieHandler,
     notImplementedHandler,
 } from "./controllers/all_movies_controller.js";
 import { getMovieHandler, putMovieHandler, deleteMovieHandler } from "./controllers/single_movie_controller.js";
+import {
+    getActorsHandler,
+    getReviewsHandler,
+    getGenresHandler,
+} from "./controllers/single_movie_collections_controller.js";
 
 process.on("uncaughtException", function (err) {
     console.error(err);
@@ -32,12 +37,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //================ MOVIE COLLECTION ================
-app.get("/api/movies", notAcceptable, async (req, res) => {
-    await getMoviesHandler(req, res, coll);
+app.head("/api/movies", notAcceptable, async (req, res) => {
+    await getMoviesHeadersHandler(req, res, coll);
 });
 
-app.head("/api/movies", notAcceptable, async (req, res) => {
-    await getMovieHeadersHandler(req, res, coll);
+app.get("/api/movies", notAcceptable, async (req, res) => {
+    await getMoviesHandler(req, res, coll);
 });
 
 app.post("/api/movies", unsupportedMediaType, async (req, res) => {
@@ -66,6 +71,14 @@ app.post("/api/movies/:id", notImplementedHandler);
 //================ COLLECTIONS UNDER SINGLE MOVIE ================
 app.get("/api/movies/:id/actors", notAcceptable, async (req, res) => {
     await getActorsHandler(req, res, coll);
+});
+
+app.get("/api/movies/:id/reviews", notAcceptable, async (req, res) => {
+    await getReviewsHandler(req, res, coll);
+});
+
+app.get("/api/movies/:id/genres", notAcceptable, async (req, res) => {
+    await getGenresHandler(req, res, coll);
 });
 
 //================ SEARCH FILTERS ================

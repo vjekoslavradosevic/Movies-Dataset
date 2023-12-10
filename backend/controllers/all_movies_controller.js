@@ -1,20 +1,20 @@
+const encoder = new TextEncoder("utf-8");
+
 export async function getMoviesHandler(req, res, coll) {
     try {
         let data = await coll.find().toArray();
-        res.set("Content-Type", "application/json; charset=utf-8");
+        let message = "";
         if (data.length === 0) {
-            res.status(200).send({
-                status: "OK",
-                message: "Fetched empty list. No movies found.",
-                response: data,
-            });
+            message = "Fetched empty list. No movies found.";
         } else {
-            res.status(200).send({
-                status: "OK",
-                message: "Fetched list of movies.",
-                response: data,
-            });
+            message = "Fetched list of movies.";
         }
+        res.set("Content-Type", "application/json; charset=utf-8");
+        res.status(200).send({
+            status: "OK",
+            message: message,
+            response: data,
+        });
     } catch (error) {
         console.log(error);
         res.set("Content-Type", "application/json; charset=utf-8");
@@ -26,10 +26,22 @@ export async function getMoviesHandler(req, res, coll) {
     }
 }
 
-export async function getMovieHeadersHandler(req, res, coll) {
+export async function getMoviesHeadersHandler(req, res, coll) {
     try {
         let data = await coll.find().toArray();
-        const byteLength = encoder.encode(data).length;
+        let message = "";
+        if (data.length === 0) {
+            message = "Fetched empty list. No movies found.";
+        } else {
+            message = "Fetched list of movies.";
+        }
+        const byteLength = encoder.encode(
+            JSON.stringify({
+                status: "OK",
+                message: message,
+                response: data,
+            })
+        ).length;
         res.set("Content-Length", byteLength);
         res.set("Content-Type", "application/json; charset=utf-8");
         res.status(200).end();

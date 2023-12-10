@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import { connectToDatabase } from "./db/connection.js";
-import { ObjectId } from "mongodb";
 import { createCriteria } from "./utils/createCriteria.js";
 import { turnToRegex } from "./utils/turnToRegex.js";
 import { notAcceptable } from "./middleware/notAcceptable.js";
@@ -11,7 +10,8 @@ import {
     getMovieHeadersHandler,
     postMovieHandler,
     notImplementedHandler,
-} from "./controllers/moviesController.js";
+} from "./controllers/all_movies_controller.js";
+import { getMovieHandler, putMovieHandler, deleteMovieHandler } from "./controllers/single_movie_controller.js";
 
 process.on("uncaughtException", function (err) {
     console.error(err);
@@ -26,11 +26,12 @@ let coll;
 })();
 
 app.set("etag", false);
-//middleware//
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//================ MOVIE COLLECTION ================
 app.get("/api/movies", notAcceptable, async (req, res) => {
     await getMoviesHandler(req, res, coll);
 });
@@ -47,49 +48,28 @@ app.put("/api/movies", notImplementedHandler);
 
 app.delete("/api/movies", notImplementedHandler);
 
+//================ SINGLE MOVIE ================
 app.get("/api/movies/:id", notAcceptable, async (req, res) => {
-    try {
-        let id = req.params.id;
-        if (!ObjectId.isValid(id)) {
-            res.set("Content-Type", "application/json; charset=utf-8");
-            res.status(400).send({
-                status: "Bad Request",
-                message: "Given id is not valid.",
-                response: null,
-            });
-            return;
-        }
-
-        id = new ObjectId(id);
-        let data = await coll.find({ _id: id }).toArray();
-
-        if (data.length === 0) {
-            res.set("Content-Type", "application/json; charset=utf-8");
-            res.status(404).send({
-                status: "Not Found",
-                message: "Movie does not exist.",
-                response: null,
-            });
-        } else {
-            res.set("Content-Type", "application/json; charset=utf-8");
-            res.status(404).send({
-                status: "OK",
-                message: "Fetched single movie object.",
-                response: data[0],
-            });
-        }
-    } catch (error) {
-        console.log(error);
-        res.set("Content-Type", "application/json; charset=utf-8");
-        res.status(500).send({
-            status: "Internal Server Error",
-            message: "Error on the server side.",
-            response: null,
-        });
-    }
+    await getMovieHandler(req, res, coll);
 });
 
-app.post("/", async (req, res) => {
+app.put("/api/movies/:id", unsupportedMediaType, async (req, res) => {
+    await putMovieHandler(req, res, coll);
+});
+
+app.delete("/api/movies/:id", async (req, res) => {
+    await deleteMovieHandler(req, res, coll);
+});
+
+app.post("/api/movies/:id", notImplementedHandler);
+
+//================ COLLECTIONS UNDER SINGLE MOVIE ================
+app.get("/api/movies/:id/actors", notAcceptable, async (req, res) => {
+    await getActorsHandler(req, res, coll);
+});
+
+//================ SEARCH FILTERS ================
+app.post("/search", async (req, res) => {
     try {
         let criteria = req.body.criteria;
         let everything = req.body.everything;

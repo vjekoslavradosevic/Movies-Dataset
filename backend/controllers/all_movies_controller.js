@@ -62,9 +62,9 @@ export async function postMovieHandler(req, res, coll) {
             return;
         }
 
-        await coll.insertOne({ ...movie });
+        const insertedId = (await coll.insertOne({ ...movie })).insertedId.toString();
         res.set("Content-Type", "application/json; charset=utf-8");
-        res.set("Location", "http://localhost:3000/movies/");
+        res.set("Location", "http://localhost:3000/api/movies/" + insertedId);
         res.status(201).send({
             status: "Created",
             message: "Movie successfully added.",

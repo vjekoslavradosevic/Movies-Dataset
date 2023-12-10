@@ -129,7 +129,7 @@ export default {
 
                 if (body.input === "") return;
 
-                let response = await fetch("http://localhost:3000", {
+                let response = await fetch("http://localhost:3000/search", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

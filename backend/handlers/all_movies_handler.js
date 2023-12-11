@@ -93,6 +93,11 @@ export async function postMovieHandler(req, res, coll) {
     }
 }
 
+export function optionsMoviesHandler(req, res) {
+    res.set("Allow", "GET, HEAD, POST, OPTIONS");
+    res.status(200).end();
+}
+
 export function notImplementedHandler(req, res) {
     res.set("Content-Type", "application/json; charset=utf-8");
     res.status(501).send({

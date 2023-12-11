@@ -1,22 +1,29 @@
 import express from "express";
-import cors from "cors";
+//import cors from "cors";
 import { connectToDatabase } from "./db/connection.js";
-import { createCriteria } from "./utils/createCriteria.js";
-import { turnToRegex } from "./utils/turnToRegex.js";
 import { notAcceptable } from "./middleware/notAcceptable.js";
 import { unsupportedMediaType } from "./middleware/unsupportedMediaType.js";
 import {
     getMoviesHandler,
     getMoviesHeadersHandler,
     postMovieHandler,
+    optionsMoviesHandler,
     notImplementedHandler,
-} from "./controllers/all_movies_controller.js";
-import { getMovieHandler, putMovieHandler, deleteMovieHandler } from "./controllers/single_movie_controller.js";
+} from "./handlers/all_movies_handler.js";
+import {
+    getMovieHandler,
+    putMovieHandler,
+    deleteMovieHandler,
+    optionsMovieHandler,
+} from "./handlers/single_movie_handler.js";
 import {
     getActorsHandler,
     getReviewsHandler,
     getGenresHandler,
-} from "./controllers/single_movie_collections_controller.js";
+    notImplementedRestHandler,
+    notFoundHandler,
+} from "./handlers/single_movie_collections_handler.js";
+import { postSearchHandler } from "./handlers/search_handler.js";
 
 process.on("uncaughtException", function (err) {
     console.error(err);
@@ -32,7 +39,7 @@ let coll;
 
 app.set("etag", false);
 
-app.use(cors());
+//app.use(cors()); --> isključeno jer cors middleware overridea moje HTTP OPTIONS handlere
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -53,6 +60,8 @@ app.put("/api/movies", notImplementedHandler);
 
 app.delete("/api/movies", notImplementedHandler);
 
+app.options("/api/movies", optionsMoviesHandler);
+
 //================ SINGLE MOVIE ================
 app.get("/api/movies/:id", notAcceptable, async (req, res) => {
     await getMovieHandler(req, res, coll);
@@ -64,6 +73,10 @@ app.put("/api/movies/:id", unsupportedMediaType, async (req, res) => {
 
 app.delete("/api/movies/:id", async (req, res) => {
     await deleteMovieHandler(req, res, coll);
+});
+
+app.options("/api/movies/:id", async (req, res) => {
+    await optionsMovieHandler(req, res, coll);
 });
 
 app.post("/api/movies/:id", notImplementedHandler);
@@ -81,38 +94,26 @@ app.get("/api/movies/:id/genres", notAcceptable, async (req, res) => {
     await getGenresHandler(req, res, coll);
 });
 
-//================ SEARCH FILTERS ================
+app.post("/api/movies/:id/:collection", notImplementedRestHandler);
+
+app.put("/api/movies/:id/:collection", notImplementedRestHandler);
+
+app.delete("/api/movies/:id/:collection", notImplementedRestHandler);
+
+app.options("/api/movies/:id/:collection", notImplementedRestHandler);
+
+//================ SEARCH FILTERS ====================
 app.post("/search", async (req, res) => {
-    try {
-        let criteria = req.body.criteria;
-        let everything = req.body.everything;
-        let input = req.body.input;
-
-        if (criteria.length === 0 && !everything) {
-            console.log("No search filters applied.");
-            res.status(400).send({ error: "No search filters applied." });
-            return;
-        }
-
-        if (everything) {
-            criteria = createCriteria(input);
-        }
-
-        criteria = turnToRegex(criteria);
-
-        if (criteria.length === 0) {
-            console.log("No valuable search params given.");
-            res.status(400).send({ error: "No valuable search params given." });
-            return;
-        }
-
-        let data = await coll.find({ $or: criteria }, { projection: { _id: 0 } }).toArray();
-        res.send(data);
-    } catch (error) {
-        console.error(error);
-        res.sendStatus(error.status);
-    }
+    await postSearchHandler(req, res, coll);
 });
+
+//================ CATCH-ALL HANDLERS ================
+app.get("*", notFoundHandler);
+app.head("*", notFoundHandler);
+app.post("*", notFoundHandler);
+app.put("*", notFoundHandler);
+app.delete("*", notFoundHandler);
+app.options("*", notFoundHandler);
 
 app.listen(3000, () => {
     console.log("Listening on port 3000");

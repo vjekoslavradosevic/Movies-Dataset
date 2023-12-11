@@ -1,0 +1,566 @@
+openapi: 3.0.0
+info:
+    title: "OR Movies API"
+    version: "1.0.0"
+    description: "RESTful API for managing data about movies and their details"
+paths:
+    /api/movies:
+        get:
+            summary: "Get a list of movies"
+            description: "Retrieves a list of movie objects."
+            responses:
+                "200":
+                    description: "List of movies successfully retrieved."
+                    headers:
+                        Content-Type:
+                            description: "The media type of the response"
+                            schema:
+                                type: "string"
+                                default: "application/json"
+                        Content-Length:
+                            description: "The length of the response content in bytes"
+                            schema:
+                                type: "integer"
+                    content:
+                        application/json:
+                            example:
+                                status: "OK"
+                                message: "Fetched list of movies"
+                                response:
+                                    - title: "Inglourious Basterds"
+                                      release_date: "2009-09-03"
+                                      director:
+                                          firstname: "Quentin"
+                                          lastname: "Tarantino"
+                                      producer:
+                                          firstname: "Lawrence"
+                                          lastname: "Bender"
+                                      duration: 153
+                                      actors:
+                                          - firstname: "Brad"
+                                            lastname: "Pitt"
+                                      genres:
+                                          - "Adventure"
+                                      plot: "In Nazi-occupied France during World War II."
+                                      reviews:
+                                          - name: "Metacritic"
+                                            score: 69
+                                      oscars: 1
+                                      box_office: 321.5
+                "406":
+                    description: Requested media type not supported
+                "500":
+                    description: "Internal server error."
+        head:
+            summary: "Get the headers for a list of movies"
+            description: "Retrieves headers for a list of movie objects."
+            responses:
+                "200":
+                    description: "Headers successfully retrieved."
+                    headers:
+                        Content-Type:
+                            description: "The media type of the response"
+                            schema:
+                                type: "string"
+                                default: "application/json"
+                        Content-Length:
+                            description: "The length of the response content in bytes"
+                            schema:
+                                type: "integer"
+                "406":
+                    description: Requested media type not supported
+                "500":
+                    description: "Internal server error."
+        post:
+            summary: "Add new movie"
+            description: "Add new movie object to movies list."
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                    example: title
+                                release_date:
+                                    type: string
+                                    example: release_date
+                                director:
+                                    type: object
+                                    properties:
+                                        firstname:
+                                            type: string
+                                            example: director_firstname
+                                        lastname:
+                                            type: string
+                                            example: director_lastname
+                                producer:
+                                    type: object
+                                    properties:
+                                        firstname:
+                                            type: string
+                                            example: producer_firstname
+                                        lastname:
+                                            type: string
+                                            example: producer_lastname
+                                duration:
+                                    type: integer
+                                    example: 100
+                                actors:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            firstname:
+                                                type: string
+                                                example: actor_firstname
+                                            lastname:
+                                                type: string
+                                                example: actor_lastname
+                                genres:
+                                    type: array
+                                    items:
+                                        type: string
+                                        example: genre
+                                plot:
+                                    type: string
+                                    example: plot of the movie
+                                reviews:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            name:
+                                                type: string
+                                                example: review_platform
+                                            score:
+                                                type: integer
+                                                example: 78
+                                oscars:
+                                    type: integer
+                                    example: 1
+                                box_office:
+                                    type: integer
+                                    example: 13
+
+            responses:
+                "201":
+                    description: "Movie successfully added."
+                    headers:
+                        Content-Type:
+                            description: "The media type of the response"
+                            schema:
+                                type: "string"
+                                default: "application/json"
+                        Content-Length:
+                            description: "The length of the response content in bytes"
+                            schema:
+                                type: "integer"
+                        Location:
+                            description: URI of the resource
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            example:
+                                status: "Created"
+                                message: "Added single movie object."
+                                response:
+                                    _id: "65761b35766d70556076c501"
+                                    title: "Reservoir Dogs"
+                                    release_date: "1992-01-21"
+                                    director:
+                                        firstname: "Quentin"
+                                        lastname: "Tarantino"
+                                    producer:
+                                        firstname: "Lawrence"
+                                        lastname: "Bender"
+                                    duration: 99
+                                    actors:
+                                        - firstname: "Harvey"
+                                          lastname: "Keitel"
+                                    genres:
+                                        - "Crime"
+                                    plot: After a simple jewelry heist goes terribly wrong.
+                                    reviews:
+                                        - name: "Metacritic"
+                                          score: 79
+                                    oscars: 1
+                                    box_office: 2.8
+                "400":
+                    description: Request body is empty.
+                "415":
+                    description: Given data cannot be interpreted.
+                "422":
+                    description: Movie already exists.
+                "500":
+                    description: Internal server error.
+        options:
+            summary: Get supported methods for /api/movies
+            description: Retrieves only HTTP headers with Allow header.
+            responses:
+                "200":
+                    description: Headers successfully retrieved
+                    headers:
+                        Allow:
+                            description: Contains supported methods for resource
+                            schema:
+                                type: string
+    /api/movies/{id}:
+        parameters:
+            - name: id
+              in: path
+              description: The ID of the movie
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Get movie details
+            description: Retrieves movie representation.
+            responses:
+                "200":
+                    description: Successful response
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            example:
+                                status: "OK"
+                                message: "Fetched single movie object."
+                                response:
+                                    _id: "65761b35766d70556076c501"
+                                    title: "Reservoir Dogs"
+                                    release_date: "1992-01-21"
+                                    director:
+                                        firstname: "Quentin"
+                                        lastname: "Tarantino"
+                                    producer:
+                                        firstname: "Lawrence"
+                                        lastname: "Bender"
+                                    duration: 99
+                                    actors:
+                                        - firstname: "Harvey"
+                                          lastname: "Keitel"
+                                    genres:
+                                        - "Crime"
+                                    plot: After a simple jewelry heist goes terribly wrong.
+                                    reviews:
+                                        - name: "Metacritic"
+                                          score: 79
+                                    oscars: 1
+                                    box_office: 2.8
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+        head:
+            summary: Get the headers for a movie
+            description: Retrieves only the headers for the movie object.
+            responses:
+                "200":
+                    description: Successful response
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+        put:
+            summary: Update movie details
+            description: Updates details of a specific movie.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                oscars:
+                                    type: integer
+                                    example: 0
+            responses:
+                "200":
+                    description: Movie updated successfully.
+                "400":
+                    description: Request body is empty or given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "415":
+                    description: Media type not supported.
+                "500":
+                    description: Internal server error.
+        delete:
+            summary: Delete a movie
+            description: Deletes a specific movie.
+            responses:
+                "204":
+                    description: Movie deleted successfully.
+                "400":
+                    description: Given id is not valid.
+                "500":
+                    description: Internal server error.
+        options:
+            summary: Get supported methods for /movies/{id}
+            description: Retrieves only HTTP headers with Allow header.
+            responses:
+                "200":
+                    description: Headers successfully retrieved
+                    headers:
+                        Allow:
+                            description: Contains supported methods for resource
+                            schema:
+                                type: string
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "500":
+                    description: Internal server error.
+    /api/movies/{id}/actors:
+        parameters:
+            - name: id
+              in: path
+              description: The ID of the movie
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Get a list of actors for a movie
+            description: Retrieves a list of actors.
+            parameters:
+                - name: firstname
+                  in: query
+                  description: First name of the actor (optional)
+                  schema:
+                      type: string
+                - name: lastname
+                  in: query
+                  description: Last name of the actor (optional)
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Successfull response
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            example:
+                                status: "OK"
+                                message: Fetched list of actors.
+                                response:
+                                    - firstname: Harvey
+                                      lastname: Keitel
+                                    - firstname: Tim
+                                      lastname: Roth
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+        head:
+            summary: Get the headers for a list of actors for a movie
+            description: Retrieves only the headers for the list of actors.
+            parameters:
+                - name: firstname
+                  in: query
+                  description: First name of the actor (optional)
+                  schema:
+                      type: string
+                - name: lastname
+                  in: query
+                  description: Last name of the actor (optional)
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Headers successfully retrieved
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+    /api/movies/{id}/reviews:
+        parameters:
+            - name: id
+              in: path
+              description: The ID of the movie
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Get a list of reviews for a movie
+            description: Retrieves a list of reviews.
+            parameters:
+                - name: score
+                  in: query
+                  description: Score given by review platform (optional)
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Successfull response
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            example:
+                                status: "OK"
+                                message: Fetched list of reviews.
+                                response:
+                                    - name: Metacritic
+                                      score: 79
+                                    - name: Imdb
+                                      score: 81
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+        head:
+            summary: Get the headers for a list of reviews for a movie
+            description: Retrieves only the headers for the list of reviews.
+            parameters:
+                - name: score
+                  in: query
+                  description: Score given by review platform (optional)
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Headers successfully retrieved
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+    /api/movies/{id}/genres:
+        parameters:
+            - name: id
+              in: path
+              description: The ID of the movie
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Get a list of genres for a movie
+            description: Retrieves a list of genres.
+            responses:
+                "200":
+                    description: Successfull response
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            example:
+                                status: "OK"
+                                message: Fetched list of genres.
+                                response:
+                                    - War
+                                    - Drama
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.
+        head:
+            summary: Get the headers for a list of genres for a movie
+            description: Retrieves only the headers for the list of genres.
+            responses:
+                "200":
+                    description: Headers successfully retrieved
+                    headers:
+                        Content-Type:
+                            description: Resource representation media type
+                            schema:
+                                type: string
+                        Content-Length:
+                            description: Length of resource representation in bytes
+                            schema:
+                                type: integer
+                "400":
+                    description: Given id is not valid.
+                "404":
+                    description: Movie does not exist.
+                "406":
+                    description: Requested media type not supported.
+                "500":
+                    description: Internal server error.

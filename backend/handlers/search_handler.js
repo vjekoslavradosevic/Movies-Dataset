@@ -1,5 +1,5 @@
-import { createCriteria } from "./utils/createCriteria.js";
-import { turnToRegex } from "./utils/turnToRegex.js";
+import { createCriteria } from "../utils/createCriteria.js";
+import { turnToRegex } from "../utils/turnToRegex.js";
 
 export async function postSearchHandler(req, res, coll) {
     try {

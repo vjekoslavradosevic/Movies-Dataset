@@ -42,6 +42,7 @@ app.set("etag", false);
 //app.use(cors()); --> isključeno jer cors middleware overridea moje HTTP OPTIONS handlere
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("C:\\Users\\rados\\Documents\\Movies_dataset\\backend\\public"));
 
 //================ MOVIE COLLECTION ================
 app.head("/api/movies", notAcceptable, async (req, res) => {

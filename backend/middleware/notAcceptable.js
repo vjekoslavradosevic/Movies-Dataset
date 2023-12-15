@@ -1,7 +1,7 @@
 import { splitAccept, acceptInSupported } from "../utils/splitAccept.js";
 const supported_types = ["application/json", "*/*"];
 
-//stavlja se samo na handlere koji salju podatke -> get (ali i head), post, put
+//stavlja se samo na handlere koji salju podatke -> get (ali i head)
 export function notAcceptable(req, res, next) {
     const accept = splitAccept(req.headers["accept"]);
     if (acceptInSupported(accept, supported_types)) {

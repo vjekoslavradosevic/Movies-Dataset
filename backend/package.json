@@ -4,13 +4,24 @@
   "author": "Vjekoslav Radošević",
   "license": "MIT",
   "description": "A backend server for filtering a dataset about movies.",
-  "keywords": ["movies", "film", "actors", "box office", "oscars", "nodejs", "expressjs", "mongodb"],
+  "keywords": [
+    "movies",
+    "film",
+    "actors",
+    "box office",
+    "oscars",
+    "nodejs",
+    "expressjs",
+    "mongodb"
+  ],
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "client": "openapi-generator-cli generate -i /local/public/openapi.yaml -g javascript -o /local/generated-sources/openapi"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

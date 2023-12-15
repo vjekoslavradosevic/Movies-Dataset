@@ -57,11 +57,13 @@ app.post("/api/movies", unsupportedMediaType, async (req, res) => {
     await postMovieHandler(req, res, coll);
 });
 
+app.options("/api/movies", optionsMoviesHandler);
+
 app.put("/api/movies", notImplementedHandler);
 
 app.delete("/api/movies", notImplementedHandler);
 
-app.options("/api/movies", optionsMoviesHandler);
+app.patch("/api/movies", notImplementedHandler);
 
 //================ SINGLE MOVIE ================
 app.get("/api/movies/:id", notAcceptable, async (req, res) => {
@@ -81,6 +83,8 @@ app.options("/api/movies/:id", async (req, res) => {
 });
 
 app.post("/api/movies/:id", notImplementedHandler);
+
+app.patch("/api/movies/:id", notImplementedHandler);
 
 //================ COLLECTIONS UNDER SINGLE MOVIE ================
 app.get("/api/movies/:id/actors", notAcceptable, async (req, res) => {
@@ -103,6 +107,8 @@ app.delete("/api/movies/:id/:collection", notImplementedRestHandler);
 
 app.options("/api/movies/:id/:collection", notImplementedRestHandler);
 
+app.patch("/api/movies/:id/:collection", notImplementedRestHandler);
+
 //================ SEARCH FILTERS ====================
 app.post("/search", async (req, res) => {
     await postSearchHandler(req, res, coll);
@@ -115,6 +121,7 @@ app.post("*", notFoundHandler);
 app.put("*", notFoundHandler);
 app.delete("*", notFoundHandler);
 app.options("*", notFoundHandler);
+app.patch("*", notFoundHandler);
 
 app.listen(3000, () => {
     console.log("Listening on port 3000");

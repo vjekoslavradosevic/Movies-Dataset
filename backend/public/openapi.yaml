@@ -1,8 +1,17 @@
 openapi: 3.0.0
 info:
-    title: "OR Movies API"
-    version: "1.0.0"
-    description: "RESTful API for managing data about movies and their details"
+    title: OR Movies API
+    description: RESTful API for managing data about movies and their details
+    version: 1.0.0
+    license:
+        name: MIT
+        url: https://github.com/vjekoslavradosevic/Movies-Dataset/blob/main/LICENSE
+    contact:
+        name: Vjekoslav Radošević
+        email: vr53601@fer.hr
+    externalDocs:
+        description: Find out more
+        url: https://github.com/vjekoslavradosevic/Movies-Dataset
 paths:
     /api/movies:
         get:
@@ -168,27 +177,26 @@ paths:
                                 status: "Created"
                                 message: "Added single movie object."
                                 response:
-                                    _id: "65761b35766d70556076c501"
-                                    title: "Reservoir Dogs"
-                                    release_date: "1992-01-21"
+                                    title: "title"
+                                    release_date: "release_date"
                                     director:
-                                        firstname: "Quentin"
-                                        lastname: "Tarantino"
+                                        firstname: "director_firstname"
+                                        lastname: "director_lastname"
                                     producer:
-                                        firstname: "Lawrence"
-                                        lastname: "Bender"
-                                    duration: 99
+                                        firstname: "producer_firstname"
+                                        lastname: "producer_lastname"
+                                    duration: 100
                                     actors:
-                                        - firstname: "Harvey"
-                                          lastname: "Keitel"
+                                        - firstname: "actor_firstname"
+                                          lastname: "actor_lastname"
                                     genres:
-                                        - "Crime"
-                                    plot: After a simple jewelry heist goes terribly wrong.
+                                        - "genre"
+                                    plot: Plot of the movie.
                                     reviews:
-                                        - name: "Metacritic"
+                                        - name: "review_platform"
                                           score: 79
                                     oscars: 1
-                                    box_office: 2.8
+                                    box_office: 13
                 "400":
                     description: Request body is empty.
                 "415":

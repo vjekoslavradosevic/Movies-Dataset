@@ -1,9 +1,9 @@
 {
-  "name": "movies_dataset_filtering_server",
-  "version": "2.0.0",
+  "name": "restful_api_for_managing_movie_info",
+  "version": "3.0.0",
   "author": "Vjekoslav Radošević",
   "license": "MIT",
-  "description": "A backend server for filtering a dataset about movies.",
+  "description": "A RESTful API for managing movie information.",
   "keywords": [
     "movies",
     "film",

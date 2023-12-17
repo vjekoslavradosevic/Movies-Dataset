@@ -9,9 +9,6 @@ info:
     contact:
         name: Vjekoslav Radošević
         email: vr53601@fer.hr
-    externalDocs:
-        description: Find out more
-        url: https://github.com/vjekoslavradosevic/Movies-Dataset
 components:
     headers:
         ContentTypeHeader:

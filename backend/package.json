@@ -16,10 +16,6 @@
   ],
   "type": "module",
   "main": "app.js",
-  "scripts": {
-    "start": "node app",
-    "client": "openapi-generator-cli generate -i /local/public/openapi.yaml -g javascript -o /local/generated-sources/openapi"
-  },
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "cors": "^2.8.5",

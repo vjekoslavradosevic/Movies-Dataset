@@ -12,6 +12,128 @@ info:
     externalDocs:
         description: Find out more
         url: https://github.com/vjekoslavradosevic/Movies-Dataset
+components:
+    headers:
+        ContentTypeHeader:
+            description: "The media type of the response"
+            schema:
+                type: "string"
+        ContentLengthHeader:
+            description: "The length of the response content in bytes"
+            schema:
+                type: "integer"
+        LocationHeader:
+            description: URI of the resource
+            schema:
+                type: string
+        AllowHeader:
+            description: Contains supported methods for resource
+            schema:
+                type: string
+    schemas:
+        Movie:
+            type: object
+            properties:
+                title:
+                    type: string
+                    description: Movie title
+                    example: Inglorious Basterds
+                release_date:
+                    type: string
+                    description: Release date of the movie
+                    example: "2009-09-03"
+                director:
+                    type: object
+                    properties:
+                        firstname:
+                            type: string
+                            description: Director's firstname
+                            example: Quentin
+                        lastname:
+                            type: string
+                            description: Director's lastname
+                            example: Tarantino
+                producer:
+                    type: object
+                    properties:
+                        firstname:
+                            type: string
+                            description: Producer's firstname
+                            example: Lawrence
+                        lastname:
+                            type: string
+                            description: Producer's lastname
+                            example: Bender
+                duration:
+                    type: integer
+                    description: Duration of the movie in minutes
+                    example: 153
+                actors:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            firstname:
+                                type: string
+                                description: Actor's firstname
+                                example: Brad
+                            lastname:
+                                type: string
+                                description: Actor's lastname
+                                example: Pitt
+                genres:
+                    type: array
+                    items:
+                        type: string
+                        description: Movie genres
+                        example: War
+                plot:
+                    type: string
+                    description: Movie plot
+                    example: In Nazi-occupied France during World War II, a plan to assassinate Nazi leaders by a group of Jewish U.S. soldiers coincides with a theatre owner's vengeful plans for the same.
+                reviews:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                                description: Review source
+                                example: Metacritic
+                            score:
+                                type: integer
+                                description: Review score
+                                example: 69
+                oscars:
+                    type: integer
+                    description: Number of Oscars won
+                    example: 1
+                box_office:
+                    type: number
+                    description: Box office revenue in millions of dollars
+                    example: 321
+        Actor:
+            type: object
+            properties:
+                firstname:
+                    type: string
+                    description: Actor's first name
+                    example: Tim
+                lastname:
+                    type: string
+                    description: Actor's last name
+                    example: Roth
+        Review:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: Review source
+                    example: Metacritic
+                score:
+                    type: integer
+                    description: Review score
+                    example: 69
 paths:
     /api/movies:
         get:
@@ -22,44 +144,28 @@ paths:
                     description: "List of movies successfully retrieved."
                     headers:
                         Content-Type:
-                            description: "The media type of the response"
-                            schema:
-                                type: "string"
-                                default: "application/json"
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: "The length of the response content in bytes"
-                            schema:
-                                type: "integer"
+                            $ref: "#/components/headers/ContentLengthHeader"
                     content:
                         application/json:
-                            example:
-                                status: "OK"
-                                message: "Fetched list of movies"
-                                response:
-                                    - title: "Inglourious Basterds"
-                                      release_date: "2009-09-03"
-                                      director:
-                                          firstname: "Quentin"
-                                          lastname: "Tarantino"
-                                      producer:
-                                          firstname: "Lawrence"
-                                          lastname: "Bender"
-                                      duration: 153
-                                      actors:
-                                          - firstname: "Brad"
-                                            lastname: "Pitt"
-                                      genres:
-                                          - "Adventure"
-                                      plot: "In Nazi-occupied France during World War II."
-                                      reviews:
-                                          - name: "Metacritic"
-                                            score: 69
-                                      oscars: 1
-                                      box_office: 321.5
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Status of the response
+                                    message:
+                                        type: string
+                                        description: Human-readable message about the response
+                                    response:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Movie"
                 "406":
                     description: Requested media type not supported
                 "500":
-                    description: "Internal server error."
+                    description: Internal server error
         head:
             summary: "Get the headers for a list of movies"
             description: "Retrieves headers for a list of movie objects."
@@ -68,18 +174,13 @@ paths:
                     description: "Headers successfully retrieved."
                     headers:
                         Content-Type:
-                            description: "The media type of the response"
-                            schema:
-                                type: "string"
-                                default: "application/json"
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: "The length of the response content in bytes"
-                            schema:
-                                type: "integer"
+                            $ref: "#/components/headers/ContentLengthHeader"
                 "406":
                     description: Requested media type not supported
                 "500":
-                    description: "Internal server error."
+                    description: Internal server error
         post:
             summary: "Add new movie"
             description: "Add new movie object to movies list."
@@ -88,115 +189,30 @@ paths:
                 content:
                     application/json:
                         schema:
-                            type: object
-                            properties:
-                                title:
-                                    type: string
-                                    example: title
-                                release_date:
-                                    type: string
-                                    example: release_date
-                                director:
-                                    type: object
-                                    properties:
-                                        firstname:
-                                            type: string
-                                            example: director_firstname
-                                        lastname:
-                                            type: string
-                                            example: director_lastname
-                                producer:
-                                    type: object
-                                    properties:
-                                        firstname:
-                                            type: string
-                                            example: producer_firstname
-                                        lastname:
-                                            type: string
-                                            example: producer_lastname
-                                duration:
-                                    type: integer
-                                    example: 100
-                                actors:
-                                    type: array
-                                    items:
-                                        type: object
-                                        properties:
-                                            firstname:
-                                                type: string
-                                                example: actor_firstname
-                                            lastname:
-                                                type: string
-                                                example: actor_lastname
-                                genres:
-                                    type: array
-                                    items:
-                                        type: string
-                                        example: genre
-                                plot:
-                                    type: string
-                                    example: plot of the movie
-                                reviews:
-                                    type: array
-                                    items:
-                                        type: object
-                                        properties:
-                                            name:
-                                                type: string
-                                                example: review_platform
-                                            score:
-                                                type: integer
-                                                example: 78
-                                oscars:
-                                    type: integer
-                                    example: 1
-                                box_office:
-                                    type: integer
-                                    example: 13
-
+                            $ref: "#/components/schemas/Movie"
             responses:
                 "201":
                     description: "Movie successfully added."
                     headers:
                         Content-Type:
-                            description: "The media type of the response"
-                            schema:
-                                type: "string"
-                                default: "application/json"
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: "The length of the response content in bytes"
-                            schema:
-                                type: "integer"
+                            $ref: "#/components/headers/ContentLengthHeader"
                         Location:
-                            description: URI of the resource
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/LocationHeader"
                     content:
                         application/json:
-                            example:
-                                status: "Created"
-                                message: "Added single movie object."
-                                response:
-                                    title: "title"
-                                    release_date: "release_date"
-                                    director:
-                                        firstname: "director_firstname"
-                                        lastname: "director_lastname"
-                                    producer:
-                                        firstname: "producer_firstname"
-                                        lastname: "producer_lastname"
-                                    duration: 100
-                                    actors:
-                                        - firstname: "actor_firstname"
-                                          lastname: "actor_lastname"
-                                    genres:
-                                        - "genre"
-                                    plot: Plot of the movie.
-                                    reviews:
-                                        - name: "review_platform"
-                                          score: 79
-                                    oscars: 1
-                                    box_office: 13
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Status of the response
+                                    message:
+                                        type: string
+                                        description: Human-readable message about the response
+                                    response:
+                                        $ref: "#/components/schemas/Movie"
                 "400":
                     description: Request body is empty.
                 "415":
@@ -213,9 +229,7 @@ paths:
                     description: Headers successfully retrieved
                     headers:
                         Allow:
-                            description: Contains supported methods for resource
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/AllowHeader"
     /api/movies/{id}:
         parameters:
             - name: id
@@ -232,40 +246,22 @@ paths:
                     description: Successful response
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                     content:
                         application/json:
-                            example:
-                                status: "OK"
-                                message: "Fetched single movie object."
-                                response:
-                                    _id: "65761b35766d70556076c501"
-                                    title: "Reservoir Dogs"
-                                    release_date: "1992-01-21"
-                                    director:
-                                        firstname: "Quentin"
-                                        lastname: "Tarantino"
-                                    producer:
-                                        firstname: "Lawrence"
-                                        lastname: "Bender"
-                                    duration: 99
-                                    actors:
-                                        - firstname: "Harvey"
-                                          lastname: "Keitel"
-                                    genres:
-                                        - "Crime"
-                                    plot: After a simple jewelry heist goes terribly wrong.
-                                    reviews:
-                                        - name: "Metacritic"
-                                          score: 79
-                                    oscars: 1
-                                    box_office: 2.8
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Status of the response
+                                    message:
+                                        type: string
+                                        description: Human-readable message about the response
+                                    response:
+                                        $ref: "#/components/schemas/Movie"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -282,13 +278,9 @@ paths:
                     description: Successful response
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -305,11 +297,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            type: object
-                            properties:
-                                oscars:
-                                    type: integer
-                                    example: 0
+                            $ref: "#/components/schemas/Movie"
             responses:
                 "200":
                     description: Movie updated successfully.
@@ -339,9 +327,7 @@ paths:
                     description: Headers successfully retrieved
                     headers:
                         Allow:
-                            description: Contains supported methods for resource
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/AllowHeader"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -375,23 +361,24 @@ paths:
                     description: Successfull response
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                     content:
                         application/json:
-                            example:
-                                status: "OK"
-                                message: Fetched list of actors.
-                                response:
-                                    - firstname: Harvey
-                                      lastname: Keitel
-                                    - firstname: Tim
-                                      lastname: Roth
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Status of the response
+                                    message:
+                                        type: string
+                                        description: Human-readable message about the response
+                                    response:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Actor"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -419,13 +406,9 @@ paths:
                     description: Headers successfully retrieved
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -456,23 +439,24 @@ paths:
                     description: Successfull response
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                     content:
                         application/json:
-                            example:
-                                status: "OK"
-                                message: Fetched list of reviews.
-                                response:
-                                    - name: Metacritic
-                                      score: 79
-                                    - name: Imdb
-                                      score: 81
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Status of the response
+                                    message:
+                                        type: string
+                                        description: Human-readable message about the response
+                                    response:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Review"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -495,13 +479,9 @@ paths:
                     description: Headers successfully retrieved
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -526,21 +506,26 @@ paths:
                     description: Successfull response
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                     content:
                         application/json:
-                            example:
-                                status: "OK"
-                                message: Fetched list of genres.
-                                response:
-                                    - War
-                                    - Drama
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Status of the response
+                                    message:
+                                        type: string
+                                        description: Human-readable message about the response
+                                    response:
+                                        type: array
+                                        items:
+                                            type: string
+                                            description: movie genre
+                                            example: War
                 "400":
                     description: Given id is not valid.
                 "404":
@@ -557,13 +542,9 @@ paths:
                     description: Headers successfully retrieved
                     headers:
                         Content-Type:
-                            description: Resource representation media type
-                            schema:
-                                type: string
+                            $ref: "#/components/headers/ContentTypeHeader"
                         Content-Length:
-                            description: Length of resource representation in bytes
-                            schema:
-                                type: integer
+                            $ref: "#/components/headers/ContentLengthHeader"
                 "400":
                     description: Given id is not valid.
                 "404":

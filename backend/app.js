@@ -1,5 +1,5 @@
 import express from "express";
-//import cors from "cors";
+import cors from "cors";
 import { connectToDatabase } from "./db/connection.js";
 import { notAcceptable } from "./middleware/notAcceptable.js";
 import { unsupportedMediaType } from "./middleware/unsupportedMediaType.js";
@@ -24,6 +24,8 @@ import {
     notFoundHandler,
 } from "./handlers/single_movie_collections_handler.js";
 import { postSearchHandler } from "./handlers/search_handler.js";
+import { auth } from "express-oauth2-jwt-bearer";
+import { checkDatasetRefresh } from "./middleware/checkScope.js";
 
 process.on("uncaughtException", function (err) {
     console.error(err);
@@ -39,10 +41,20 @@ let coll;
 
 app.set("etag", false);
 
-//app.use(cors()); --> isključeno jer cors middleware overridea moje HTTP OPTIONS handlere
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("C:\\Users\\rados\\Documents\\Movies_dataset\\backend\\public"));
+
+const jwtCheck = auth({
+    audience: "http://localhost:3000",
+    issuerBaseURL: "https://dev-xim66l7npdohtkc2.us.auth0.com/",
+    tokenSigningAlg: "RS256",
+});
+
+app.get("/private", jwtCheck, checkDatasetRefresh, (req, res) => {
+    res.send({ poruka: "ova ruta zahtjeva dataset:refresh" });
+});
 
 //================ MOVIE COLLECTION ================
 app.head("/api/movies", notAcceptable, async (req, res) => {

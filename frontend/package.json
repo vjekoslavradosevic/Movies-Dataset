@@ -4,12 +4,23 @@
   "author": "Vjekoslav Radošević",
   "license": "MIT",
   "description": "A frontend server for displaying a web page about movies dataset.",
-  "keywords": ["movies", "film", "actors", "box office", "oscars", "vuejs", "webpack", "json", "csv"],
+  "keywords": [
+    "movies",
+    "film",
+    "actors",
+    "box office",
+    "oscars",
+    "vuejs",
+    "webpack",
+    "json",
+    "csv"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^2.3.3",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"

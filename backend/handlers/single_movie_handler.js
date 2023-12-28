@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { singleMovieMetadata } from "../utils/schemaMetadata.js";
 
 export async function getMovieHandler(req, res, coll) {
     try {
@@ -31,7 +32,7 @@ export async function getMovieHandler(req, res, coll) {
             res.status(200).send({
                 status: "OK",
                 message: "Fetched single movie object.",
-                response: data[0],
+                response: singleMovieMetadata(data[0]),
             });
         }
     } catch (error) {

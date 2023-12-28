@@ -1,4 +1,5 @@
 const encoder = new TextEncoder("utf-8");
+import { allMoviesMetadata } from "../utils/schemaMetadata.js";
 
 export async function getMoviesHandler(req, res, coll) {
     try {
@@ -13,7 +14,7 @@ export async function getMoviesHandler(req, res, coll) {
         res.status(200).send({
             status: "OK",
             message: message,
-            response: data,
+            response: allMoviesMetadata(data),
         });
     } catch (error) {
         console.log(error);

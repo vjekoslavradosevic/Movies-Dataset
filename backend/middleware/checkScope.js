@@ -1,4 +1,4 @@
-export function checkDatasetRefresh(req, res, next) {
+export function checkRefreshScope(req, res, next) {
     const scopes = req.auth.payload.scope;
     const scopesArray = scopes.split(" ");
     const hasRequiredScope = scopesArray.includes("refresh:dataset");

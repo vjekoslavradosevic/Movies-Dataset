@@ -41,3 +41,15 @@ export function exportToCSV(data) {
     link.download = "movies.csv";
     return link;
 }
+
+export function toCSV(str) {
+    const bytes = new TextEncoder().encode(str);
+    const blob = new Blob([bytes], {
+        type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "movies.csv";
+    return link;
+}

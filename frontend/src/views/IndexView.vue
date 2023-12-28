@@ -24,24 +24,19 @@
 
 <script>
 import Info from "../components/Info.vue";
+import { exportToJSON, toCSV } from "../utils/exportFunctions";
 export default {
     components: { Info },
     methods: {
-        createAnchor(path, name) {
-            const link = document.createElement("a");
-            link.href = path;
-            link.download = name;
-
-            return link;
+        async downloadCSV() {
+            let response = await fetch("http://localhost:3000/data/movies.csv");
+            let data = await response.text();
+            toCSV(data).click();
         },
-        downloadCSV() {
-            //putanja do .csv datoteke u odnosu na index.html
-            const csvFilePath = "./data/movies.csv";
-            this.createAnchor(csvFilePath, "movies.csv").click();
-        },
-        downloadJSON() {
-            const jsonFilePath = "./data/movies.json";
-            this.createAnchor(jsonFilePath, "movies.json").click();
+        async downloadJSON() {
+            let response = await fetch("http://localhost:3000/data/movies.json");
+            let data = await response.json();
+            exportToJSON(data).click();
         },
     },
 };

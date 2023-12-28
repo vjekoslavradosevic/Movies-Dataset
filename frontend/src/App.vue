@@ -10,15 +10,15 @@
                 </router-link>
                 <div v-if="!isAuthenticated" class="link" @click="login">Prijava</div>
                 <div v-if="isAuthenticated" class="link" @click="logout">Odjava (Auth0)</div>
-                <div v-if="isAuthenticated" class="link" @click="logoutLocal">Odjava (Local)</div>
-                <div v-if="isAuthenticated" class="link" @click="refreshData">Refresh data</div>
-                <router-link to="/info"
-                    ><div class="link" :class="{ 'link-active': $route.path === '/info' }">User Info</div>
+                <div v-if="isAuthenticated" class="link" @click="logoutLocal">Odjava (Lokalno)</div>
+                <div v-if="isAuthenticated" class="link" @click="refreshData">Osvježi preslike</div>
+                <router-link v-if="isAuthenticated" to="/info"
+                    ><div class="link" :class="{ 'link-active': $route.path === '/info' }">Korisnički profil</div>
                 </router-link>
             </div>
         </div>
     </nav>
-    <div>user: {{ user }}</div>
+    <!-- <div>user: {{ user }}</div> -->
     <router-view />
 </template>
 
@@ -31,7 +31,7 @@ export default {
             isAuthenticated: this.$auth0.isAuthenticated,
             links: [
                 {
-                    name: "Index",
+                    name: "Početna",
                     href: "/",
                 },
                 {
@@ -65,32 +65,32 @@ export default {
                 const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
                 document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=localhost";
             }
-
-            console.log("Cookies cleared.");
-
-            console.log("user: ", this.$auth0.user);
-            console.log("isAuthenticated: ", this.$auth0.isAuthenticated);
         },
         refreshData() {
             this.$worker.onmessage = async (event) => {
-                let accessToken = event.data.token;
+                try {
+                    let accessToken = event.data.token;
 
-                if (!accessToken) {
-                    accessToken = await this.$auth0.getAccessTokenSilently();
+                    if (!accessToken) {
+                        accessToken = await this.$auth0.getAccessTokenSilently();
 
-                    this.$worker.postMessage({
-                        action: "storeToken",
-                        token: accessToken,
+                        this.$worker.postMessage({
+                            action: "storeToken",
+                            token: accessToken,
+                        });
+                    }
+
+                    let response = await fetch("http://localhost:3000/refresh-dataset", {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
                     });
+                    let data = await response.json();
+                    console.log(data.message);
+                } catch (error) {
+                    console.log(error);
                 }
-
-                let response = await fetch("http://localhost:3000/private", {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
-                let data = await response.json();
-                console.log(data);
             };
 
             this.$worker.postMessage({

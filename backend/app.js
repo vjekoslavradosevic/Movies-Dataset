@@ -25,7 +25,8 @@ import {
 } from "./handlers/single_movie_collections_handler.js";
 import { postSearchHandler } from "./handlers/search_handler.js";
 import { auth } from "express-oauth2-jwt-bearer";
-import { checkDatasetRefresh } from "./middleware/checkScope.js";
+import { checkRefreshScope } from "./middleware/checkScope.js";
+import { postRefreshHandler } from "./handlers/refresh_handler.js";
 
 process.on("uncaughtException", function (err) {
     console.error(err);
@@ -50,10 +51,6 @@ const jwtCheck = auth({
     audience: "http://localhost:3000",
     issuerBaseURL: "https://dev-xim66l7npdohtkc2.us.auth0.com/",
     tokenSigningAlg: "RS256",
-});
-
-app.get("/private", jwtCheck, checkDatasetRefresh, (req, res) => {
-    res.send({ poruka: "ova ruta zahtjeva dataset:refresh" });
 });
 
 //================ MOVIE COLLECTION ================
@@ -121,12 +118,16 @@ app.options("/api/movies/:id/:collection", notImplementedRestHandler);
 
 app.patch("/api/movies/:id/:collection", notImplementedRestHandler);
 
-//================ SEARCH FILTERS ====================
+//============= SEARCH FILTERS & DATASET REFRESH ==============
 app.post("/search", async (req, res) => {
     await postSearchHandler(req, res, coll);
 });
 
-//================ CATCH-ALL HANDLERS ================
+app.post("/refresh-dataset", jwtCheck, checkRefreshScope, async (req, res) => {
+    await postRefreshHandler(req, res, coll);
+});
+
+//==================== CATCH-ALL HANDLERS =====================
 app.get("*", notFoundHandler);
 app.head("*", notFoundHandler);
 app.post("*", notFoundHandler);

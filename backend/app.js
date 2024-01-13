@@ -42,6 +42,12 @@ let coll;
 
 app.set("etag", false);
 
+app.options("/api/movies", optionsMoviesHandler);
+
+app.options("/api/movies/:id", async (req, res) => {
+    await optionsMovieHandler(req, res, coll);
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -66,8 +72,6 @@ app.post("/api/movies", unsupportedMediaType, async (req, res) => {
     await postMovieHandler(req, res, coll);
 });
 
-app.options("/api/movies", optionsMoviesHandler);
-
 app.put("/api/movies", notImplementedHandler);
 
 app.delete("/api/movies", notImplementedHandler);
@@ -85,10 +89,6 @@ app.put("/api/movies/:id", unsupportedMediaType, async (req, res) => {
 
 app.delete("/api/movies/:id", async (req, res) => {
     await deleteMovieHandler(req, res, coll);
-});
-
-app.options("/api/movies/:id", async (req, res) => {
-    await optionsMovieHandler(req, res, coll);
 });
 
 app.post("/api/movies/:id", notImplementedHandler);

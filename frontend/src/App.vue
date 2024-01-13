@@ -69,7 +69,7 @@ export default {
         async refreshData() {
             this.$worker.onmessage = async (event) => {
                 if (!event.data.present) {
-                    console.log("token nije u workeru, dobavljam novi");
+                    //console.log("token nije u workeru, dobavljam novi");
                     this.$worker.postMessage({
                         action: "storeToken",
                         token: await this.$auth0.getAccessTokenSilently(),

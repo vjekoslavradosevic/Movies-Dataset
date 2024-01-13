@@ -30,6 +30,11 @@ export default {
             user: this.$auth0.user,
         };
     },
+    mounted() {
+        if (!this.user) {
+            this.$router.push("/");
+        }
+    },
 };
 </script>
 

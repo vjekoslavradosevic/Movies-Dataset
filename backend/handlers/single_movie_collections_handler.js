@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { allActorsMetadata, allReviewsMetadata, allGenresMetadata } from "../utils/schemaMetadata.js";
 
 export async function getActorsHandler(req, res, coll) {
     try {
@@ -51,7 +52,7 @@ export async function getActorsHandler(req, res, coll) {
         res.status(200).send({
             status: "OK",
             message: message,
-            response: actors,
+            response: allActorsMetadata(actors),
         });
     } catch (error) {
         console.log(error);
@@ -112,7 +113,7 @@ export async function getReviewsHandler(req, res, coll) {
         res.status(200).send({
             status: "OK",
             message: message,
-            response: reviews,
+            response: allReviewsMetadata(reviews),
         });
     } catch (error) {
         console.log(error);
@@ -166,7 +167,7 @@ export async function getGenresHandler(req, res, coll) {
         res.status(200).send({
             status: "OK",
             message: message,
-            response: genres,
+            response: allGenresMetadata(genres),
         });
     } catch (error) {
         console.log(error);

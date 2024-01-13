@@ -11,8 +11,7 @@ export default {
         const code = this.$route.query.code;
         if (code) {
             try {
-                this.accessToken = await this.$auth0.getAccessTokenSilently();
-                this.storeToken();
+                await this.storeToken();
                 this.$router.push("/");
 
                 //znaci sa this.$auth0.idTokenClaims dobivam vec parsirane claims van -> kao sto bi dobio da access token posaljem na /userinfo
@@ -26,10 +25,10 @@ export default {
         }
     },
     methods: {
-        storeToken() {
+        async storeToken() {
             this.$worker.postMessage({
                 action: "storeToken",
-                token: this.accessToken,
+                token: await this.$auth0.getAccessTokenSilently(),
             });
         },
     },

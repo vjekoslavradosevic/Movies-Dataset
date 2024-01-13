@@ -40,7 +40,7 @@ export async function getMoviesHeadersHandler(req, res, coll) {
             JSON.stringify({
                 status: "OK",
                 message: message,
-                response: data,
+                response: allMoviesMetadata(data),
             })
         ).length;
         res.set("Content-Length", byteLength);

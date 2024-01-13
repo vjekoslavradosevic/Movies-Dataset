@@ -66,35 +66,23 @@ export default {
                 document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=localhost";
             }
         },
-        refreshData() {
+        async refreshData() {
             this.$worker.onmessage = async (event) => {
-                try {
-                    let accessToken = event.data.token;
-
-                    if (!accessToken) {
-                        accessToken = await this.$auth0.getAccessTokenSilently();
-
-                        this.$worker.postMessage({
-                            action: "storeToken",
-                            token: accessToken,
-                        });
-                    }
-
-                    let response = await fetch("http://localhost:3000/refresh-dataset", {
-                        method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
+                if (!event.data.present) {
+                    console.log("token nije u workeru, dobavljam novi");
+                    this.$worker.postMessage({
+                        action: "storeToken",
+                        token: await this.$auth0.getAccessTokenSilently(),
                     });
-                    let data = await response.json();
-                    console.log(data.message);
-                } catch (error) {
-                    console.log(error);
                 }
+
+                this.$worker.postMessage({
+                    action: "refreshDataset",
+                });
             };
 
             this.$worker.postMessage({
-                action: "retrieveToken",
+                action: "tokenPresent",
             });
         },
     },

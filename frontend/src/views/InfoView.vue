@@ -1,9 +1,6 @@
 <template>
     <div v-if="user" class="user-info">
-        <img
-            src="https://s.gravatar.com/avatar/6b6cb91d20473078f5fb642ac782bfed?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2For.png"
-            alt="User Profile Picture"
-        />
+        <img :src="user.picture" alt="User Profile Picture" />
         <h1>
             Hello, <span id="nickname">{{ user.nickname }}</span
             >!

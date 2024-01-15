@@ -20,6 +20,7 @@ function addMovieMetadata(movie) {
 
     return {
         "@type": "Movie",
+        identifier: movie._id,
         title: movie.title,
         release_date: movie.release_date,
         director: {

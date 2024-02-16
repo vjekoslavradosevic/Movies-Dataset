@@ -18,7 +18,6 @@
             </div>
         </div>
     </nav>
-    <!-- <div>user: {{ user }}</div> -->
     <router-view />
 </template>
 
